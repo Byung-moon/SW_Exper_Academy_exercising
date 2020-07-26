@@ -1,0 +1,137 @@
+cpp 공부
+참고 : https://jhnyang.tistory.com/115
+
+    String Libreary
+
+
+    # 크기( size(), length() )
+        - 공백도 포함시켜서 셈.
+        - str.size()    // 한글은 2byte, 영어는 1byte로 인식
+        - str.length()  // size 함수와 이름만 다를뿐 같은 역할
+
+
+    # 인덱스( at(), front(), back() )
+        - 특정 위치에 있는 글자를 빼옴
+
+        - str = "Hello this is a sentence";
+        - cout << str[0]        // H
+        - cout << str.at(1)     // e
+        - str.at(5) = '~'       // Hello~this is a sentence   --> 특정 인덱스의 값 변경 가능
+        - str.at[23] = '!'      // Hello~this is a sentnc!    --> 이런 식으로도 변경 가능
+        - cout << str.front()   // H     --> at(0)와 같음. 맨 처음 character를 의미.
+        - cout << str.back()    // !     --> 맨 마지막 character를 의미.
+
+
+    # 문자열 비교( compare() )
+        - 두 개의 문자열을 비교하는 함수
+
+        str1 = "Hello"
+        str2 = "Hello"
+
+        str3 = "apple"
+        str4 = "banana"
+
+        str1.compare(str2)      // 0 출력. 같다는 의미
+        str3.compare(str4)      // -1 출력. str3이 사전적으로 str4보다 더 앞에 있다는 의미.
+        str4.compare(str3)      // 1 출력. 
+
+
+    # 글자 추가 ( +, +=, append(), insert() )
+        - 연산자가 오버로딩 되어있어서 '+', '+=' 연산자 사용 가능. 빼기는 X.
+        - append 함수 사용 시, default로 사용할 경우 문자열 맨 마지막부터 추가.
+        - 중간에 삽입하고 싶은 경우에는 insert 함수 사용.   insert(추가할 위치, 문자열).
+        
+          #include <string>
+          append(const string& str, size_type str_index, size_type str_num) // str: 추가할 문자열, str_index: 추가할 문자열의 시작 지점, str_num: 시작지점으로부터 몇 개의 글자의 크기를 추가할지
+          append(size_type num, char c) // c문자열을 num만큼 반복해서 붙이라는 말.
+
+          string str1 = "Hello";
+          string str2 = "friend";
+          string str3 = str1 + " " + str2;  // Hello friend
+          str3 += "! ";  // Hello friend! 
+        
+          string str4 = "nice to meet you"; // 
+          str3.append(str4, 0, 4);           // Hello friend! nice                  --> str3에다가 str4의 0 index부터 4칸 붙여서 str3에 저장.
+          str3.append(" to meet you");       // Hello friend! nice to meet you      --> str3에다가 to meet you 붙이기.
+          str3.append(5, '.');               // Hello friend! nice to meet you..... --> append()를 default로 사용. 맨 마지막에 '.'를 다섯개 붙임.
+
+    
+    # 특정 문자 탐색( find() )
+        - 특정 문자열을 찾아주는, 검색해주는 함수
+        - 특정 문자열을 찾으면 그 문자열이 시작하는 문자의 위치를 리턴. 문자열이 없으면 
+          #include <string>
+
+          string str1 = "friend a word 'computer' in this sentence!";
+          string str2 = "computer";
+          cout << str1.find(str2)   // 13
+          cout << str1.at(13)       // c
+
+          size_t pos;
+          string str3 = "I love my friends, my friends are sooo nice";
+          pos = str3.find("friend");            // 10
+          pos = str3.find("friend", pos + 1)    // 22       --> 두 번째로 나타난 위치
+
+          find_first_of()       :find랑 같으나 주어진 문자가 첫번째로 나타나는 위치
+          find_last_of()        :처음부터가 아닌 마지막으로 나타나는 문자의 위치 찾음
+          find_first_not_of()   :문자가 처음으로 나타나지 않는 위치 출력.
+          rfind()               :거꾸로 탐색
+
+    
+    # 문자열 초기화( clear(), empty() )
+        - clear(): 문자열을 비워주는 함수
+        - empty(): 문자열이 비었나 확인하는 함수
+
+        - str.empty() -> str이 비었으면 1을 반환
+
+    
+    # 문자열 추출( sunstr() ) *********중요
+        - 추출한 문자열을 리턴해줌
+        - 시작 위치를 음수로 넣으면 run-time 에러 발생.
+        - 시작 위치가 문자열보다 길면 빈 문자열을 리턴
+        - 추출할 길이 len이 문자열의 길이보다 길면 문자열의 끝까지만 추출해줌
+
+
+        string substr(size_t pos, size_t len) const;
+        
+        pos : 추출할 문자열의 시작 위치
+        len : 그 위치로부터 문자 몇 개까지 추출할건지
+
+        string str1 = "good morning Mr Brown";
+        string str2;
+
+        str2 = str1.substr(5,7);    // morning
+        str2 = str1.substr(5);      // morening Mr Brown    --> len을 입력하지 않으면 끝까지 추출
+        str2 = str1.substr(str1.find("Mr"));    // Mr Brown --> Mr의 index를 찾아서 그 위치부터 끝까지 추출 
+
+
+    # Iterator 반복자 ( begin(), end() )
+        - begin과 end는 index를 리턴
+
+        string:iterator it;
+        for(it = str.begin(); it<str.end(); it++)
+        {
+            cout << *it;
+        }
+
+        --> for(int i=0; i<str.size(); i++) 과 같음. 
+        --> but,  반복자는 표준이기때문에 vector와 STL 컨테이너들을 사용할 때 얘들도 같은 반복자가 있기 때문에 변형하지 않고 똑같은 알고리즘을 활용가능
+        --> int i, int j 보다 가독성이 좋음.
+
+    
+    # 특정 문자열 제거하기 ( erase() )
+        - 특정 문자열을 제거할 때 사용
+        - 매개 변수의 개수와 타입에 따라 사용법이 다름
+
+        1. 매개변수가 하나인데, 매개변수가 숫자일때
+            string& string:: erase(size_type pos)
+
+            erase(2) // 3번째 글자부터 그 뒤는 전부 삭제
+
+        2. 매개변수가 하나인데, 매개변수가 반복자일 때
+            string& string:: erase(iterator pos)
+
+            --> 그 반복자가 가리키는 지점만 삭제.
+
+        3. 매개변수가 두 개인데, 매개변수가 숫자일 때
+            
+        
